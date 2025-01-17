@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.FTCIntoTheDeep.AutoCode.Specimen;
+package org.firstinspires.ftc.teamcode.FTCIntoTheDeep.AutoCode.Bucket;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -15,22 +15,31 @@ import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepDrive.MotorPowers;
 
 import java.util.Locale;
 
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.AutoDone;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Claw;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ClawClosed;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ClawOPEN;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ClawOpen;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.SmushMush;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.SmushMushClosed;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.SmushMushOpen;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TheToungue;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ToungueClose;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ToungueIn;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TrashCan;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TrashCanReady;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Uppy;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyD;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyHC;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyMini;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyMiniDown;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyMiniIn;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyPlaceHC;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Wrist;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.odo;
 
 @Autonomous(preselectTeleOp = "MeckyDrives")
-public class Specimen1Park extends LinearOpMode {
+public class BucketAuto extends LinearOpMode {
     IntoTheDeepDriveBase intoTheDeepDriveBase;
 
     private void updateOdoTelemetry() {
@@ -210,7 +219,7 @@ public class Specimen1Park extends LinearOpMode {
 
 
         // Servos
-        TheToungue = (Servo) hardwareMap.get(Servo.class,  "TheToungue");
+        TheToungue = (Servo) hardwareMap.get(Servo.class,  "TheToungue");   
         UppyMini = (Servo) hardwareMap.get(Servo.class, "UppyMini" );
         Claw = (Servo) hardwareMap.get(Servo.class, "Claw" );
         Wrist = (Servo) hardwareMap.get(Servo.class, "Wrist" );
@@ -240,18 +249,15 @@ public class Specimen1Park extends LinearOpMode {
         intoTheDeepDriveBase.enablePID();
 
         SmushMushClosed();
+        updateOdoTelemetry();
         waitForStart();
 
         while (opModeIsActive()) {
-//            odo.update();
-//            Pose2D pos = odo.getPosition();
-//            String data = String.format(Locale.US, "{X: %.3f, Y: %.3f, H: %.3f}", pos.getX(DistanceUnit.INCH), pos.getY(DistanceUnit.INCH), pos.getHeading(AngleUnit.DEGREES));
-//            telemetry.addData("Position", data);
-//            telemetry.addData("Status", odo.getDeviceStatus());
-//            telemetry.update();
+            while (!AutoDone){
+                Specimen();
+                updateOdoTelemetry();
+            }
             updateOdoTelemetry();
-//            runGamepad();
-            Specimen();
         }
     }
     void runGamepad() {
@@ -264,6 +270,7 @@ public class Specimen1Park extends LinearOpMode {
         MecanumDrive.cartesian(intoTheDeepDriveBase, -leftStickY * speedFactor, leftStickX * speedFactor, rightStickX * speedFactor);
 
     }
+
     void Specimen(){
         StraightNT(-22,0);
         UppyHC();
@@ -274,10 +281,23 @@ public class Specimen1Park extends LinearOpMode {
         SmushMushOpen();
         StraightNT(-22,0);
         UppyD();
-        StraightNT(-10,0);
-        StrafeNT(40,0);
-        sleep(15000);
+        StraightNT(-28,0);
+        StrafeNT(-46,0);
+        TurnL(170);
+        UppyMiniDown();
+        ToungueClose();
+        ClawOPEN();
+        sleep(4000);
+        ClawClosed();
+        ToungueIn();
+        UppyMiniIn();
+        TrashCanReady();
+        ClawOpen();
+        TurnR(150);
+        sleep(4000);
+        
+
+        AutoDone = true;
         stop();
-        sleep(30000);
     }
 }

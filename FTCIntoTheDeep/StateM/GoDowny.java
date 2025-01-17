@@ -81,23 +81,23 @@ public class GoDowny extends StateMachine<GoDowny.State> implements StateMMovmen
                 TrashCanStore();
 
                 if(getElapsedStateTime() > 750) {
-                    switchState(State.NOWYOUMAY);
+                    switchState(State.IDLE);
                 }
                 break;
             }
-            case  NOWYOUMAY: {
-                UppyD();
-
-                if(UppyCounts <50) {
-                    TrashCanReady();
-
-                    if(getElapsedStateTime() >2000) {
-                        switchState(State.IDLE);
-
-                    }
-                }
-                break;
-            }
+//            case  NOWYOUMAY: {
+//                UppyD();
+//
+//                if(UppyCounts <50) {
+//                    TrashCanReady();
+//
+//                    if(getElapsedStateTime() >2000) {
+//                        switchState(State.IDLE);
+//
+//                    }
+//                }
+//                break;
+//            }
             case IDLE: {
                 if(getElapsedStateTime() > 100) {
                     DeepGlobals.RESETME = true;

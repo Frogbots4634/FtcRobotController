@@ -20,12 +20,16 @@ import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.StateM.GoDowny;
 import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepDrive.IntoTheDeepDriveBase;
 
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.BackUpSpecimen;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Booper;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Claw;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ClawClosed;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ClawOPEN;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ClawOpen;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ClawToggle;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.HangGoUppy;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.HangHangsHang;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Lservopos;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.NoBoop;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.PlaceSpecimen;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.RESETME;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Rservopos;
@@ -36,10 +40,14 @@ import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.SmushMus
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TheToungue;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ToungueClose;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ToungueFar;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ToungueIn;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TrashCan;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TrashCanDump;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TrashCanReady;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TrashCanStore;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Uppy;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyD;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyDown;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyHB;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyCounts;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyHC;
@@ -58,6 +66,10 @@ import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.WristR45
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Wriststraight;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.robot;
 import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.Maget;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.TrashCanToogle;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.ToungeToogle;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyHangs;
+import static org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepGlobals.UppyClings;
 
 @TeleOp
 public class MeckyDrives extends LinearOpMode {
@@ -125,7 +137,8 @@ public class MeckyDrives extends LinearOpMode {
 
         // Other Motors
         Uppy = (DcMotorEx) hardwareMap.get(DcMotorEx.class, "Uppy");
-//        UppyHangs = (DcMotorEx) hardwareMap.get(DcMotorEx.class, "UppyHangs");
+        UppyClings = (DcMotorEx) hardwareMap.get(DcMotorEx.class, "UppyClings");
+        UppyHangs = (DcMotorEx) hardwareMap.get(DcMotorEx.class, "UppyHangs");
 
 
         // Servos
@@ -137,6 +150,8 @@ public class MeckyDrives extends LinearOpMode {
         DeepGlobals.Holdy = (Servo) hardwareMap.get(Servo.class, "Holdy" );
         SmushMush = (Servo) hardwareMap.get(Servo.class, "SmushMush" );
         TrashCan = (Servo) hardwareMap.get(Servo.class, "TrashCan" );
+        Booper = (Servo) hardwareMap.get(Servo.class, "Booper" );
+
 
         Maget = hardwareMap.get(RevTouchSensor.class, "Maget");
 //        Color Sensor
@@ -145,8 +160,8 @@ public class MeckyDrives extends LinearOpMode {
         intoTheDeepDriveBase = new IntoTheDeepDriveBase();
         intoTheDeepDriveBase.init(hardwareMap);
         intoTheDeepDriveBase.enablePID();
-        DeepGlobals.robot= intoTheDeepDriveBase;
-        DeepGlobals.driveBase= intoTheDeepDriveBase;
+        DeepGlobals.robot = intoTheDeepDriveBase;
+        DeepGlobals.driveBase = intoTheDeepDriveBase;
         DeepGlobals.trackingWheelIntegrator = trackingWheelIntegrator;
         DeepGlobals.opMode = this;
         DeepGlobals.robot.enableBrake(true);
@@ -161,6 +176,14 @@ public class MeckyDrives extends LinearOpMode {
         Uppy.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
         Uppy.setTargetPosition(1);
         Uppy.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        UppyHangs.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        UppyHangs.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        UppyHangs.setTargetPosition(1);
+        UppyHangs.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        UppyClings.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        UppyClings.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        UppyClings.setTargetPosition(1);
+        UppyClings.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
 
         // Telemetry initialisation
         telemetry.setMsTransmissionInterval(20);
@@ -168,8 +191,6 @@ public class MeckyDrives extends LinearOpMode {
         telemetry.update();
 
         waitForStart();
-
-
 
     // StateM stuff
         while (opModeIsActive()) {
@@ -197,20 +218,22 @@ public class MeckyDrives extends LinearOpMode {
                 GO.runIteration();
                 runGamepad();
             }
-            if (gamepad2.dpad_down && !RESETME) {
+            if (gamepad2.dpad_up) {
                 GD.runIteration();
                 runGamepad();
             }
-            if (Maget.isPressed()){
+            if (Maget.isPressed()) {
                 UppyCounts = 0;
+                runGamepad();
+            }
+            if (SmushMush.getPosition()== SmushMushClosed) {
+                TrashCanStore();
+                runGamepad();
             }
             runGamepad();
         }
-
     }
-
     void runGamepad() {
-
         // Default speed, change with care
         speedFactor = (float) .5;
 
@@ -221,7 +244,20 @@ public class MeckyDrives extends LinearOpMode {
 
 //  Controller 1
         if (gamepad1.left_trigger > .5) {
-            ToungueClose();
+//            ToungueClose();
+            if (UppyMini.getPosition() == ToungueClose && !ToungeToogle) {
+                ToungueIn();
+                ToungeToogle = true;
+            } else if (UppyMini.getPosition() == ToungueIn && !ToungeToogle) {
+                ToungueClose();
+                ToungeToogle = true;
+            }
+            else if(!PlaceSpecimen){
+                ToungueIn();
+                ToungeToogle = true;
+            }
+        } else {
+            ToungeToogle = false;
         }
         if (gamepad1.right_trigger > .5) {
             ToungueFar();
@@ -323,61 +359,63 @@ public class MeckyDrives extends LinearOpMode {
             UppyLB();
         }
 
-        if (gamepad2.dpad_up){
-//            Uppy.setTargetPosition(100);
-//            Uppy.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-//            Uppy.setPower(.5);
+        if (gamepad2.right_stick_button){
+            UppyDown();
+        }
+        if (gamepad2.left_stick_button){
+            NoBoop();
         }
 
         if (gamepad2.left_trigger > .5){
             UppyHC();
         }
+
         if (gamepad2.left_bumper) {
             UppyPlaceHC();
         }
         if (gamepad2.right_trigger >.5){
             UppyHB();
         }
-        /*
-        Lower bar = 600
-        Lower Bucket 3139
-         */
-    // Tim's stuff might use later
-//        if (gamepad1.x) {
-//            RHook.setPosition(1);
-//            LHook.setPosition(0);
-//            LHang.setPower(-.3);
-//            RHang.setPower(-.3);
-//        }
-//        else if (!gamepad1.left_bumper && (gamepad1.left_trigger > .5) && !gamepad1.x) {
-//            LHang.setPower(0);
-//            RHang.setPower(0);
-//        }
-//
-//        if (gamepad1.left_trigger > .5) {
-//            RHook.setPosition(1);
-//            LHook.setPosition(0);
-//            LHang.setPower(-.95);
-//            RHang.setPower(-.95);
-//        }
-//        else if (!gamepad1.left_bumper && (gamepad1.left_trigger > .5) && !gamepad1.x) {
-//            LHang.setPower(0);
-//            RHang.setPower(0);
-//        }
-//        if (gamepad1.dpad_right) {
-//            RHook.setPosition(1);
-//            LHook.setPosition(0);
-//        }
-
-//        LiftCounts = Lift.getCurrentPosition();
-//
-//        telemetry.addData("lift counts:", LiftCounts);
+        if (gamepad2.dpad_up){
+            HangGoUppy();
+        }
+        if (gamepad2.dpad_down){
+            HangHangsHang();
+        }
 
 
         // Drive
         MecanumDrive.cartesian(robot, -leftStickY * speedFactor, leftStickX * speedFactor, rightStickX * speedFactor);
     }
 }
+/*
+ Tim's stuff might use later
+        if (gamepad1.x) {
+            RHook.setPosition(1);
+            LHook.setPosition(0);
+            LHang.setPower(-.3);
+            RHang.setPower(-.3);
+        }
+        else if (!gamepad1.left_bumper && (gamepad1.left_trigger > .5) && !gamepad1.x) {
+            LHang.setPower(0);
+            RHang.setPower(0);
+        }
+
+        if (gamepad1.left_trigger > .5) {
+            RHook.setPosition(1);
+            LHook.setPosition(0);
+            LHang.setPower(-.95);
+            RHang.setPower(-.95);
+        }
+        else if (!gamepad1.left_bumper && (gamepad1.left_trigger > .5) && !gamepad1.x) {
+            LHang.setPower(0);
+            RHang.setPower(0);
+        }
+        if (gamepad1.dpad_right) {
+            RHook.setPosition(1);
+            LHook.setPosition(0);
+        }
+*/
 /*
     Value Index
         TrashCan Dump is .5

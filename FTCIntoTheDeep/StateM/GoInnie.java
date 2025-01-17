@@ -70,7 +70,7 @@ public class GoInnie extends StateMachine<GoInnie.State> implements StateMMovmen
 
             case START: {
 
-                if (getElapsedStateTime() > 500) {
+                if (getElapsedStateTime() > 1000) {
                     switchState(State.RETRACTTHEWATERFALL);
                 }
                 break;

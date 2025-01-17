@@ -89,7 +89,7 @@ public class HangTest extends LinearOpMode {
             UppyHangs.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             UppyHangs.setPower(.75);
 
-            UppyClings.setTargetPosition(-0);
+            UppyClings.setTargetPosition(0);
             UppyClings.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
             UppyClings.setPower(.75);
         }

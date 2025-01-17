@@ -9,6 +9,7 @@ package org.firstinspires.ftc.teamcode.FTCIntoTheDeep;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -17,11 +18,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.AutoCode.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.DeepDrive.IntoTheDeepDriveBase;
-import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.StateM.GoDowny;
-import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.StateM.GoInnie;
-import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.StateM.GoOutie;
-import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.StateM.SpinnieGoInnie;
-import org.firstinspires.ftc.teamcode.FTCIntoTheDeep.StateM.SpinnieGoOutie;
 
 import java.util.Locale;
 
@@ -36,7 +32,6 @@ public class DeepGlobals {
     public static double inch;
     public static double cmToInch;
     public static IntoTheDeepDriveBase robot;
-    public static Servo Booper;
     public static double Y;
     public static double X;
     public static double wheelH;
@@ -46,49 +41,7 @@ public class DeepGlobals {
 
     IntoTheDeepDriveBase intoTheDeepDriveBase;
 //
-//    Pose2D pos = odo.getPosition();
-//    double GetX = pos.getX(DistanceUnit.INCH);
-//    double GetY = pos.getY(DistanceUnit.INCH);
-//    double GetH = pos.getHeading(AngleUnit.DEGREES);
-//
-//    private void Turn(double H){
-//        double Error = H - GetH;
-//        double Kp = (double) 1/180;
-//        double LCorrection = Error * -Kp;
-//        double RCorrection = Error * Kp;
-//        MotorPowers motorPowers = new MotorPowers();
-//
-//        intoTheDeepDriveBase.setMotorPowers(LCorrection, RCorrection);
-//
-//    }
-//    private void Straight(double X){
-//        double Error = X - GetX;
-//        double Kp = (double) 1/80;
-//        double Correction = Error * Kp;
-//        MotorPowers motorPowers = new MotorPowers();
-//        intoTheDeepDriveBase.setMotorPowers(Correction);
-////        while (!xDone){
-////            xDone = GetX < X + 1 && GetX > X - 1;
-////        }
-//    }
-//    private void Strafe(double Y){
-//        double Error = Y - GetY;
-//        double Kp = (double) 1/80;
-//        double FLCorrection = Error * -Kp;
-//        double FRCorrection = Error * Kp;
-//        double RLCorrection = Error * Kp;
-//        double RRCorrection = Error * -Kp;
-//        MotorPowers motorPowers = new MotorPowers();
-//
-//        intoTheDeepDriveBase.setMotorPowers(FLCorrection,FRCorrection,RLCorrection,RRCorrection);
-//    }
-
-//    public static DcMotorEx FL;
-//    public static DcMotorEx FR;
-//    public static DcMotorEx RL;
-//    public static DcMotorEx RR;
-
-    // Other Motors
+// Other Motors
     public static DcMotorEx Uppy;
     public static DcMotorEx UppyHangs;
     public static DcMotorEx UppyClings;
@@ -104,6 +57,7 @@ public class DeepGlobals {
     public static Servo TrashCan;     //bucket
     public static Servo Spinnie;
     public static Servo Wheelie;
+    public static Servo Booper;
     // probably important
     public static float Rservopos;
     public static float Lservopos;
@@ -131,12 +85,18 @@ public class DeepGlobals {
     public static boolean SmushMushDew = false;
     public static boolean PlaceSpecimen = false;
     public static boolean SpinnieToogle = false;
+    public static boolean TrashCanToogle = false;
+    public static boolean ToungeToogle = false;
+    public static boolean AutoDone = false;
 
-    public static int UppyLowB = 2300;
-    public static int UppyHighB = 4200;
+    public static int UppyLowB = 4600;
+    public static int UppyHighB = 4000;
     public static int UppyPlaceHC = 2000;
-    public static int UppyHighC = 2900;
+    public static int UppyHighC = 2700;
     public static int UppyD = 5;
+    public static int HangHangsHang =0;
+    public static int HangGoUppy = -1300;
+
     public static double ClawOpen = .1;
     public static double ClawClosed = 0 ;
     public static double ClawOPEN = .3;
@@ -152,20 +112,36 @@ public class DeepGlobals {
     public static double UppyMiniDown = .9;
     public static double UppyMinistraight = .7;
     public static double UppyMiniIn = 0;
-    public static double TrashCanDump = .5;
+    public static double TrashCanDump = .4;
     public static double TrashCanStore = 1;
-    public static double TrashCanReady = .8;
+    public static double TrashCanReady = .7;
     public static double UppyMiniUp = .4;
-    public static double UppyMiniSTRAIGHT = .8;
+    public static double UppyMiniSTRAIGHT = .9;
     public static double UppyMiniReadyPlace = .575;
     public static double UppyMiniPlace = .2;
     public static double In = 1;
     public static double Out = 0;
     public static double None = .5;
+    public static double NoBoop = 0;
+    public static double Boop = .4;
+    public static double HoldyHold = 0;
+    public static double LiftyLift = 1;
+    public static double LiftyLoose = .5;
+    public static double HoldyLoose = .5;
+
+
 
 
 //    public static double  = .1;
 
+    public static void  Hold() {
+        Lifty.setPosition(LiftyLift);
+        Holdy.setPosition(HoldyHold);
+    }
+    public static void  Loose() {
+        Lifty.setPosition(LiftyLoose);
+        Holdy.setPosition(HoldyLoose);
+    }
     public static void UppyHB() {
         Uppy.setTargetPosition(UppyHighB);
         Uppy.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -176,12 +152,12 @@ public class DeepGlobals {
         Uppy.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         Uppy.setPower(.75);
     }
+
     public static void UppyHC() {
         Uppy.setTargetPosition(UppyHighC);
         Uppy.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
         Uppy.setPower(.75);
     }
-
     public static void UppyPlaceHC() {
         Uppy.setTargetPosition(UppyPlaceHC);
         Uppy.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
@@ -194,11 +170,32 @@ public class DeepGlobals {
     }
     public static void UppyDown()  {
         while (!Maget.isPressed()) {
-            Uppy.setTargetPosition(0);
-            Uppy.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
-            Uppy.setPower(.75);
+            Uppy.setPower(-1);
         }
         UppyCounts = 0;
+    }
+    public static void HangGoUppy(){
+        UppyHangs.setTargetPosition( HangGoUppy);
+        UppyHangs.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        UppyHangs.setPower(1);
+
+        UppyClings.setTargetPosition( HangGoUppy);
+        UppyClings.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
+        UppyClings.setPower(1);
+
+        Loose();
+
+    }
+    public static void HangHangsHang(){
+        UppyHangs.setTargetPosition( HangHangsHang);
+        UppyHangs.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        UppyHangs.setPower(1);
+
+        UppyClings.setTargetPosition( HangHangsHang);
+        UppyClings.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        UppyClings.setPower(1);
+
+        Hold();
     }
     public static void ClawOpen()   {
         Claw.setPosition(ClawOpen);
@@ -278,22 +275,24 @@ public class DeepGlobals {
         Spinnie.setPosition(None);
         Wheelie.setPosition(None);
     }
-
-
-
-
-
-    public static void clearEnc()        {
-//        ctrl.setMotorMode(3, DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        ctrl.setMotorMode(1, DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//        ctrl.setMotorMode(2, DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-//
-//
-//        ctrl.setMotorMode(3, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        ctrl.setMotorMode(1, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//        ctrl.setMotorMode(2, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
+    public static void  NoBoop() {
+        Booper.setPosition(NoBoop);
     }
+    public static void  Boop() {
+        Booper.setPosition(Boop);
+    }
+
+//    public static void clearEnc()        {
+////        ctrl.setMotorMode(3, DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+////        ctrl.setMotorMode(1, DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+////        ctrl.setMotorMode(2, DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+////
+////
+////        ctrl.setMotorMode(3, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+////        ctrl.setMotorMode(1, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+////        ctrl.setMotorMode(2, DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//
+//    }
 
     public static void ResetHX() {
         LastX =trackingWheelIntegrator.getX();
